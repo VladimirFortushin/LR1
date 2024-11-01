@@ -15,41 +15,24 @@ int main(int argc, char *argv[]) {
 
     const char* filename = argv[1];
 	const char* permissionChar = argv[2];
-    int permission = atoi(permissionChar);
+    int permission = strtol(permissionChar,NULL, 8);
 
     int fd = creat(filename, permission);
     if (fd < 0) {
-        perror("Ошибка при создании файла");
+        perror("Error creating file");
 	return EXIT_FAILURE;
     }
 
-    long offset = lseek(fd, 1024L, SEEK_SET);
-    if (offset < 0) {
-        perror("lseek");
-	return EXIT_FAILURE;
-    }
-
-   
-    const char *data = "X\n";
-    if (write(fd, data, strlen(data)) < 0) {
-        perror("write");
-	return EXIT_FAILURE;
-    }
+    
 
 close(fd);
 	fd = open(filename, O_WRONLY);
 
 
-    offset = lseek(fd, 0, SEEK_SET);
-    if (offset < 0) {
-        perror("lseek");
-	return EXIT_FAILURE;
-    }
-
-    const char *line = "bla\nbla bla\nbla bla bla\n";
+    const char *line = "lambda\nomega\nrandomly written letters\n";
 	int  bytes_written = write(fd, line, strlen(line));
     if (bytes_written == -1) {
-        perror("Ошибка при записи в файл");
+        perror("Error writing to file");
 	return EXIT_FAILURE;
     }
 	close(fd);
@@ -57,7 +40,7 @@ close(fd);
 
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
-        perror("Ошибка при открытии файла на чтение");
+        perror("Error opening file for reading");
 	return EXIT_FAILURE;
    
     }
@@ -68,14 +51,14 @@ close(fd);
     int read_bytes;
 
 
-	printf("Содержимое файла:\n");
+	printf("File content:\n");
     while ((read_bytes = read(fd, buffer, buffer_size)) > 0) {
         write(STDOUT_FILENO, buffer, read_bytes);
     }
 
 	
     if (read_bytes == -1) {
-        perror("Ошибка при чтении файла");
+        perror("Error reading file");
 	return EXIT_FAILURE;
     }
 	
