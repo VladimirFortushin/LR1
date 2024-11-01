@@ -3,7 +3,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-
+//./2 2.txt 444
 
 int main(int argc, char *argv[]){
 	if(argc < 3){
@@ -12,7 +12,8 @@ int main(int argc, char *argv[]){
 
 	const char* filename = argv[1]; //const char* - mutable pointer to immutable char[]
 	const char* permissionChar = argv[2];
-	int permission = atoi(permissionChar);
+	int permission = strtol(permissionChar,NULL, 8);
+
 	
 	int fd = creat(filename, permission);
 	
